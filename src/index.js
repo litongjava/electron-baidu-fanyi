@@ -29,8 +29,16 @@ const createWindow = () => {
   let rightClickMenu = [
     {
       label: 'Reload',
+      accelerator: 'CmdOrCtrl+R',
       click: () => {
         mainWindow.reload();
+      }
+    },
+    {
+      label: 'Force Reload',
+      accelerator: 'CmdOrCtrl+Shift+R',
+      click: () => {
+        mainWindow.webContents.reloadIgnoringCache();
       }
     },
     {
@@ -47,7 +55,7 @@ const createWindow = () => {
     },
     {
       label: 'Zoom In',
-      accelerator: 'CmdOrCtrl+ Shift +Plus',
+      accelerator: 'Ctrl+Shift+=',
       click: () => {
         let zoomLevel = mainWindow.webContents.getZoomLevel();
         mainWindow.webContents.setZoomLevel(zoomLevel + 1);
