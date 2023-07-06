@@ -1,11 +1,14 @@
 const {app, BrowserWindow} = require('electron');
 const path = require('path');
+const fs = require('fs');
 const contextMenu = require('electron-context-menu');
+const config = require(path.join(__dirname, 'config.js'));
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   app.quit();
 }
+
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -17,12 +20,11 @@ const createWindow = () => {
     autoHideMenuBar: true
   });
 
-  // and load the index.html of the app.
-  // mainWindow.loadFile(path.join(__dirname, 'index.html'));
-  mainWindow.loadURL('https://fanyi.baidu.com/')
+  // Load the URL from the config file.
+  const url = config.url;
+  mainWindow.loadURL(url);
   mainWindow.setAutoHideMenuBar(true);
-  // Open the DevTools.
-  // mainWindow.webContents.openDevTools();
+
   // Set the context menu.
   contextMenu({
     window: mainWindow,
