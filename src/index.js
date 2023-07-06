@@ -26,28 +26,59 @@ const createWindow = () => {
   mainWindow.setAutoHideMenuBar(true);
 
   // Set the context menu.
+  let rightClickMenu = [
+    {
+      label: 'Reload',
+      click: () => {
+        mainWindow.reload();
+      }
+    },
+    {
+      label: 'Go Back',
+      click: () => {
+        mainWindow.webContents.goBack();
+      }
+    },
+    {
+      label: 'Go Forward',
+      click: () => {
+        mainWindow.webContents.goForward();
+      }
+    },
+    {
+      label: 'Zoom In',
+      accelerator: 'CmdOrCtrl+ Shift +Plus',
+      click: () => {
+        let zoomLevel = mainWindow.webContents.getZoomLevel();
+        mainWindow.webContents.setZoomLevel(zoomLevel + 1);
+      }
+    },
+    {
+      label: 'Zoom Out',
+      accelerator: 'CmdOrCtrl+-',
+      click: () => {
+        let zoomLevel = mainWindow.webContents.getZoomLevel();
+        mainWindow.webContents.setZoomLevel(zoomLevel - 1);
+      }
+    },
+    {
+      label: 'Reset Zoom',
+      accelerator: 'CmdOrCtrl+0',
+      click: () => {
+        mainWindow.webContents.setZoomLevel(0);
+      }
+    },
+    {
+      label: 'Toggle Full Screen',
+      accelerator: 'F11',
+      click: () => {
+        mainWindow.setFullScreen(!mainWindow.isFullScreen());
+      }
+    },
+  ];
   contextMenu({
     window: mainWindow,
-    prepend: (defaultActions, params, browserWindow) => [
-      {
-        label: 'Reload',
-        click: () => {
-          mainWindow.reload();
-        }
-      },
-      {
-        label: 'Go Back',
-        click: () => {
-          mainWindow.webContents.goBack();
-        }
-      },
-      {
-        label: 'Go Forward',
-        click: () => {
-          mainWindow.webContents.goForward();
-        }
-      },
-    ]
+    prepend: (defaultActions, params, browserWindow) => rightClickMenu
   });
 };
 
