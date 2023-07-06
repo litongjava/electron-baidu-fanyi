@@ -1,11 +1,11 @@
-const { app, BrowserWindow } = require('electron');
+const {app, BrowserWindow} = require('electron');
 const path = require('path');
+const contextMenu = require('electron-context-menu');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   app.quit();
 }
-
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -14,13 +14,39 @@ const createWindow = () => {
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
+    autoHideMenuBar: true
   });
 
   // and load the index.html of the app.
   // mainWindow.loadFile(path.join(__dirname, 'index.html'));
   mainWindow.loadURL('https://fanyi.baidu.com/')
+  mainWindow.setAutoHideMenuBar(true);
   // Open the DevTools.
   // mainWindow.webContents.openDevTools();
+  // Set the context menu.
+  contextMenu({
+    window: mainWindow,
+    prepend: (defaultActions, params, browserWindow) => [
+      {
+        label: 'Reload',
+        click: () => {
+          mainWindow.reload();
+        }
+      },
+      {
+        label: 'Go Back',
+        click: () => {
+          mainWindow.webContents.goBack();
+        }
+      },
+      {
+        label: 'Go Forward',
+        click: () => {
+          mainWindow.webContents.goForward();
+        }
+      },
+    ]
+  });
 };
 
 // This method will be called when Electron has finished
@@ -44,6 +70,5 @@ app.on('activate', () => {
     createWindow();
   }
 });
-
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
